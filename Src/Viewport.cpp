@@ -48,11 +48,6 @@ Vector2 Viewport::GetMapConstrainedCameraTarget(Vector2 CameraTarget)
 {
     Vector2 MinBounds = { CameraMapBounds.x, CameraMapBounds.y };
     Vector2 MaxBounds = { CameraMapBounds.x + CameraMapBounds.width, CameraMapBounds.y + CameraMapBounds.height };
-    TraceLog(LOG_INFO, "Camera MinBounds: (%f, %f), MaxBounds: (%f, %f)", MinBounds.x, MinBounds.y, MaxBounds.x, MaxBounds.y);
 
-
-    Vector2 NewTarget;
-    NewTarget.x = Clamp(CameraTarget.x, CameraMapBounds.x, CameraMapBounds.x + CameraMapBounds.width);
-    NewTarget.y = Clamp(CameraTarget.y, CameraMapBounds.y, CameraMapBounds.y + CameraMapBounds.height);
-    return NewTarget;
+    return Vector2Clamp(CameraTarget, MinBounds, MaxBounds);
 }
