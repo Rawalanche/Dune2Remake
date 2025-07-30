@@ -1,2 +1,5 @@
-Src\Main.cpp
-Src\Game.cpp
+Src/Game.cpp
+Src/Main.cpp
+Src/Map.cpp
+Src/Viewport.cpp
+Src/InputManager.cpp

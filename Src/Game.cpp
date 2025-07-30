@@ -1,37 +1,43 @@
 #include "Game.h"
 #include <raylib.h>
+#include <raymath.h>
 
-Game::Game() {}
+// Define the static member
+Game* Game::Instance = nullptr;
 
-void Game::Start()
+void Game::Initialize()
 {
-	const int ScreenWidth = 800;
-	const int ScreenHeight = 600;
+	Instance = this;
 
-	InitWindow(800, 600, "Dune2 Remake");
+	InitWindow(ScreenSize.Width, ScreenSize.Height, "Dune2 Remake");
 	SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
-}
 
-void Game::ProcessInput()
-{
+	Viewport.Initialize();
+	InputManager.Initialize();
+	Map.Initialize(Size2D(64, 64));
 }
 
 void Game::Update()
 {
-	if (WindowShouldClose())
-	{
-		IsRunning = false;
-	}
+	if (WindowShouldClose()) { IsRunning = false; }
+
+	InputManager.ProcessInput();
+	Viewport.Update();
+
+	Render();
 }
 
 void Game::Render()
 {
 	BeginDrawing();
-	ClearBackground(DARKGRAY);
+	BeginMode2D(Viewport.GetCamera());
+	ClearBackground(BLACK);
+	Map.Render();
+	EndMode2D();
 	EndDrawing();
 }
 
-void Game::End()
+void Game::Destroy()
 {
 	CloseWindow();
 }

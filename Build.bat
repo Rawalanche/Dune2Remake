@@ -1,11 +1,9 @@
 @echo off
 
-call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
-
 if not exist Obj mkdir Obj
 if not exist Bin mkdir Bin
 
-cl @Build.rsp /EHsc /O2 /Fo"Obj\\" ^
+cl @Build.rsp /FC /EHsc /std:c++20 /MP /Fo"Obj\\" ^
    /I Include ^
    /I "D:\Projects\Software\vcpkg\installed\x64-windows-static\include" ^
    /link ^

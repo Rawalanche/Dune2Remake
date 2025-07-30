@@ -3,15 +3,13 @@
 
 int main() {
 	Game Game;
-	Game.Start();
+	Game.Initialize();
 
 	while (!WindowShouldClose()) {
-		Game.ProcessInput();
 		Game.Update();
-		Game.Render();
 	}
 
-	Game.End();
+	Game.Destroy();
 
 	return 0;
 }
