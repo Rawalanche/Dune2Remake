@@ -7,8 +7,6 @@
 class Map
 {
 public:
-    static const int TILE_SIZE = 32;
-
     Map() {};
 
     void Initialize(Size2D MapSize);
@@ -16,6 +14,8 @@ public:
 
     int GetWidth() const { return MapSize.Width; }
     int GetHeight() const { return MapSize.Height; }
+
+    Rectangle GetMapBounds() const;
 
 private:
     Size2D MapSize;

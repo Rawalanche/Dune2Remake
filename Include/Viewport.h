@@ -18,11 +18,15 @@ public:
 
     const Camera2D& GetCamera() const { return Camera; }
 
+    Rectangle CameraMapBounds;
 private:
+    const Game* GameInstance = nullptr;
+
     bool IsPanning;
     Vector2 InitialMousePos;
     Camera2D Camera;
-    const Game* GameInstance = nullptr;
 
     void PanCamera();
+    Rectangle CalculateCameraMapBounds(const Rectangle& MapBounds);
+    Vector2 GetMapConstrainedCameraTarget(Vector2 CameraTarget);
 };

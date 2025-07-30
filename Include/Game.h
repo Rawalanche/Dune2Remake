@@ -15,7 +15,7 @@ public:
 	const Size2D ScreenSize = Size2D(1920, 1080);
 
 	Viewport Viewport;
-
+	Map Map;
 
 	Game() {};
 	void Initialize();
@@ -28,5 +28,4 @@ private:
 
 	bool IsRunning = true;
 	InputManager InputManager;
-	Map Map;
 };
