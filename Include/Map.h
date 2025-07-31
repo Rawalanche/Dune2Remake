@@ -9,15 +9,17 @@ class Map
 public:
     Map() {};
 
-    void Initialize(Size2D MapSize);
+    void Initialize();
     void Render();
 
-    int GetWidth() const { return MapSize.Width; }
-    int GetHeight() const { return MapSize.Height; }
+    int GetWidth() const { return MapImage.width; }
+    int GetHeight() const { return MapImage.height; }
 
     Rectangle GetMapBounds() const;
 
 private:
-    Size2D MapSize;
+    const int TileSize = Tile::TileSize;
     std::vector<std::vector<Tile>> Tiles;
+    Image MapImage;
+    void GenerateMap();
 };

@@ -12,7 +12,8 @@ void Game::Initialize()
 	InitWindow(ScreenSize.Width, ScreenSize.Height, "Dune2 Remake");
 	SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
 
-	Map.Initialize(Size2D(64, 64));
+	Tile::Initialize();
+	Map.Initialize();
 	Viewport.Initialize();
 	InputManager.Initialize();
 }

@@ -1,5 +1,6 @@
-Src/Game.cpp
-Src/Main.cpp
-Src/Map.cpp
-Src/Viewport.cpp
-Src/InputManager.cpp
+Source/Game.cpp
+Source/InputManager.cpp
+Source/Main.cpp
+Source/Map.cpp
+Source/Tile.cpp
+Source/Viewport.cpp

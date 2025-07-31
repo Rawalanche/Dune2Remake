@@ -1,20 +1,34 @@
 #pragma once
+#include "Types.h"
 #include <raylib.h>
+#include <unordered_map>
+#include <string>
 
 enum class TileType
 {
     Sand,
-    Ground,
-    Rock
+    Rock,
+    Cliff
 };
 
-struct Tile
+class Tile
 {
-    TileType Type;
-    Color TileColor;
+public:
+    static constexpr int TileSize = 64;
+    static std::unordered_map<std::string, Size2D> TilePatternMap;
+
+    Tile() {};
+
+    static void Initialize();
+
+    TileType TileType = TileType::Sand;
     int SpiceAmount;
 
-    static constexpr int TileSize = 32;
+    void DrawTile(int x, int y);
 
-    Tile(TileType Type = TileType::Sand, Color TileColor = BROWN, int SpiceAmount = 0) : Type(Type), TileColor(TileColor), SpiceAmount(SpiceAmount) {}
+    const Rectangle GetTileTexture();
+    const Rectangle GetTileFromPattern(const std::string& Pattern);
+
+    static Texture2D TileSet;
+
 };
