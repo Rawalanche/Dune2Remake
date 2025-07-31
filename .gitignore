@@ -2,3 +2,4 @@
 *.code-workspace
 Binary/
 Obj/
+*.pdb
