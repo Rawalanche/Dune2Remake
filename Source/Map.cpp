@@ -52,8 +52,8 @@ void Map::Render()
 
     BeginShaderMode(MapShader);
 
-    Vector2 mapSize = GetMapSize();
-    SetShaderValue(MapShader, GetShaderLocation(MapShader, "MapSize"), &mapSize, SHADER_UNIFORM_VEC2);
+    Vector2 MapSize = GetMapSize();
+    SetShaderValue(MapShader, GetShaderLocation(MapShader, "MapSize"), &MapSize, SHADER_UNIFORM_VEC2);
 
     int slot1 = 1; SetShaderValue(MapShader, GetShaderLocation(MapShader, "MapTexture"), &slot1, SHADER_UNIFORM_INT);
     int slot2 = 2; SetShaderValue(MapShader, GetShaderLocation(MapShader, "SandTileTexture"), &slot2, SHADER_UNIFORM_INT);
@@ -65,7 +65,6 @@ void Map::Render()
 
     EndShaderMode();
 
-    // Reset to slot 0
     rlActiveTextureSlot(0);
 }
 

@@ -26,8 +26,10 @@ void main()
     vec3 BlendedSample = mix(SandSample, RockSample, Blend).rgb;
     vec3 BlendedNormal = normalize(mix(SandNormal, RockNormal, Blend));
 
-    vec3 LightDirection = normalize(vec3(-1.0, 1.0, 1.0));
-    float Light = max(dot(BlendedNormal, LightDirection), 0.0);
+    vec3 LightDirection = normalize(vec3(-1.0, 1.0, 0.5));
+    vec3 AmbientLight = vec3(0.4, 0.5, 0.6);
+    vec3 DirectLight = vec3((max(dot(BlendedNormal, LightDirection), 0.0))) * vec3(1.0,0.9,0.8);
+    vec3 Light = AmbientLight + DirectLight;
 
     FinalColor = vec4(BlendedSample * Light, 1.0);
 }
