@@ -39,21 +39,34 @@ void Map::GenerateMap()
 
 void Map::Render()
 {
+    rlActiveTextureSlot(1);
+    rlEnableTexture(MapTexture.id);
+    rlActiveTextureSlot(2);
+    rlEnableTexture(Tile::SandTileTexture.id);
+    rlActiveTextureSlot(3);
+    rlEnableTexture(Tile::SandTileNormalTexture.id);
+    rlActiveTextureSlot(4);
+    rlEnableTexture(Tile::RockTileTexture.id);
+    rlActiveTextureSlot(5);
+    rlEnableTexture(Tile::RockTileNormalTexture.id);
+
     BeginShaderMode(MapShader);
 
-    Vector2 MapSize = GetMapSize();
-    SetShaderValue(MapShader, GetShaderLocation(MapShader, "MapSize"), &MapSize, SHADER_UNIFORM_VEC2);
-    SetShaderValueTexture(MapShader, GetShaderLocation(MapShader, "MapTexture"), MapTexture);
-    SetShaderValueTexture(MapShader, GetShaderLocation(MapShader, "SandTileTexture"), Tile::SandTileTexture);
-    SetShaderValueTexture(MapShader, GetShaderLocation(MapShader, "SandTileNormalTexture"), Tile::SandTileNormalTexture);
-    SetShaderValueTexture(MapShader, GetShaderLocation(MapShader, "RockTileTexture"), Tile::RockTileTexture);
-    SetShaderValueTexture(MapShader, GetShaderLocation(MapShader, "RockTileNormalTexture"), Tile::RockTileNormalTexture);
-    Rectangle MapBounds = GetMapBounds();
-    DrawTexturePro(Tile::DummyTexture, MapBounds, MapBounds, Vector2{ 0.0f, 0.0f }, 0.0f, WHITE);
+    Vector2 mapSize = GetMapSize();
+    SetShaderValue(MapShader, GetShaderLocation(MapShader, "MapSize"), &mapSize, SHADER_UNIFORM_VEC2);
+
+    int slot1 = 1; SetShaderValue(MapShader, GetShaderLocation(MapShader, "MapTexture"), &slot1, SHADER_UNIFORM_INT);
+    int slot2 = 2; SetShaderValue(MapShader, GetShaderLocation(MapShader, "SandTileTexture"), &slot2, SHADER_UNIFORM_INT);
+    int slot3 = 3; SetShaderValue(MapShader, GetShaderLocation(MapShader, "SandTileNormalTexture"), &slot3, SHADER_UNIFORM_INT);
+    int slot4 = 4; SetShaderValue(MapShader, GetShaderLocation(MapShader, "RockTileTexture"), &slot4, SHADER_UNIFORM_INT);
+    int slot5 = 5; SetShaderValue(MapShader, GetShaderLocation(MapShader, "RockTileNormalTexture"), &slot5, SHADER_UNIFORM_INT);
+
+    DrawTexturePro(Tile::DummyTexture, GetMapBounds(), GetMapBounds(), Vector2(0, 0), 0.f, WHITE);
 
     EndShaderMode();
 
-    DrawRectangleLinesEx(GetMapBounds(), 5.f, Color(0, 0, 0, 128));
+    // Reset to slot 0
+    rlActiveTextureSlot(0);
 }
 
 Rectangle Map::GetMapBounds() const
