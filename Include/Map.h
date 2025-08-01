@@ -12,14 +12,19 @@ public:
     void Initialize();
     void Render();
 
-    int GetWidth() const { return MapImage.width; }
-    int GetHeight() const { return MapImage.height; }
-
     Rectangle GetMapBounds() const;
-
+    Vector2 GetMapSize() const
+    {
+        return Vector2
+        {
+            static_cast<float>(MapImage.width),
+            static_cast<float>(MapImage.height)
+        };
+    }
 private:
-    const int TileSize = Tile::TileSize;
     std::vector<std::vector<Tile>> Tiles;
     Image MapImage;
+    Texture2D MapTexture;
+    Shader MapShader;
     void GenerateMap();
 };

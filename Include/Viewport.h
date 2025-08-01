@@ -22,7 +22,7 @@ public:
 private:
     const Game* GameInstance = nullptr;
 
-    bool IsPanning;
+    bool IsPanning = false;
     Vector2 InitialMousePos;
     Camera2D Camera;
 

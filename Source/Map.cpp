@@ -1,10 +1,16 @@
 #include "Map.h"
 #include "Game.h"
 #include <algorithm>
+#include "rlgl.h"
+#include <raymath.h>
 
 void Map::Initialize()
 {
     MapImage = LoadImage("Assets/Maps/Map_Test.png");
+    MapTexture = LoadTextureFromImage(MapImage);
+    SetTextureWrap(MapTexture, TEXTURE_WRAP_CLAMP);
+    SetTextureFilter(MapTexture, TEXTURE_FILTER_BILINEAR);
+    MapShader = LoadShader(nullptr, "Shaders/Map.fs");
     GenerateMap();
 }
 
@@ -12,20 +18,20 @@ void Map::Initialize()
 void Map::GenerateMap()
 {
     Tiles.resize(MapImage.height, std::vector<Tile>(MapImage.width, Tile()));
+
     for (int y = 0; y < MapImage.height; ++y)
     {
         for (int x = 0; x < MapImage.width; ++x)
         {
             const Color& TileColor = GetImageColor(MapImage, x, y);
-            Tile& Tile = Tiles[y][x];
+            Tile& tile = Tiles[y][x];
             if (TileColor.g > 0)
             {
-                Tile.TileType = TileType::Rock;
-                TraceLog(LOG_INFO, "Tile at (%d, %d) is Ground", x, y);
+                tile.TileType = TileType::Rock;
             }
             else
             {
-                Tile.TileType = TileType::Sand;
+                tile.TileType = TileType::Sand;
             }
         }
     }
@@ -33,18 +39,24 @@ void Map::GenerateMap()
 
 void Map::Render()
 {
-    for (int y = 0; y < MapImage.height; ++y)
-    {
-        for (int x = 0; x < MapImage.width; ++x)
-        {
-            Tile& Tile = Tiles[y][x];
-            Tile.DrawTile(x, y);
-        }
-    }
-    DrawRectangleLinesEx(GetMapBounds(), 5.f, Color(0,0,0,128));
+    BeginShaderMode(MapShader);
+
+    Vector2 MapSize = GetMapSize();
+    SetShaderValue(MapShader, GetShaderLocation(MapShader, "MapSize"), &MapSize, SHADER_UNIFORM_VEC2);
+    SetShaderValueTexture(MapShader, GetShaderLocation(MapShader, "MapTexture"), MapTexture);
+    SetShaderValueTexture(MapShader, GetShaderLocation(MapShader, "SandTileTexture"), Tile::SandTileTexture);
+    SetShaderValueTexture(MapShader, GetShaderLocation(MapShader, "SandTileNormalTexture"), Tile::SandTileNormalTexture);
+    SetShaderValueTexture(MapShader, GetShaderLocation(MapShader, "RockTileTexture"), Tile::RockTileTexture);
+    SetShaderValueTexture(MapShader, GetShaderLocation(MapShader, "RockTileNormalTexture"), Tile::RockTileNormalTexture);
+    Rectangle MapBounds = GetMapBounds();
+    DrawTexturePro(Tile::DummyTexture, MapBounds, MapBounds, Vector2{ 0.0f, 0.0f }, 0.0f, WHITE);
+
+    EndShaderMode();
+
+    DrawRectangleLinesEx(GetMapBounds(), 5.f, Color(0, 0, 0, 128));
 }
 
 Rectangle Map::GetMapBounds() const
 {
-    return Rectangle(0.f, 0.f, MapImage.width * TileSize, MapImage.height * TileSize);
+    return Rectangle(0.f, 0.f, MapImage.width * Tile::TileSize, MapImage.height * Tile::TileSize);
 }

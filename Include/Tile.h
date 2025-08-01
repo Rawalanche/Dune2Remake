@@ -15,7 +15,11 @@ class Tile
 {
 public:
     static constexpr int TileSize = 64;
-    static std::unordered_map<std::string, Size2D> TilePatternMap;
+    static Texture2D DummyTexture;
+    static Texture2D SandTileTexture;
+    static Texture2D SandTileNormalTexture;
+    static Texture2D RockTileTexture;
+    static Texture2D RockTileNormalTexture;
 
     Tile() {};
 
@@ -23,12 +27,4 @@ public:
 
     TileType TileType = TileType::Sand;
     int SpiceAmount;
-
-    void DrawTile(int x, int y);
-
-    const Rectangle GetTileTexture();
-    const Rectangle GetTileFromPattern(const std::string& Pattern);
-
-    static Texture2D TileSet;
-
 };
