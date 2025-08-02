@@ -49,6 +49,10 @@ void Map::Render()
     rlEnableTexture(Tile::RockTileTexture.id);
     rlActiveTextureSlot(5);
     rlEnableTexture(Tile::RockTileNormalTexture.id);
+    rlActiveTextureSlot(6);
+    rlEnableTexture(Tile::CliffTileTexture.id);
+    rlActiveTextureSlot(7);
+    rlEnableTexture(Tile::CliffTileNormalTexture.id);
 
     BeginShaderMode(MapShader);
 
@@ -60,6 +64,8 @@ void Map::Render()
     int slot3 = 3; SetShaderValue(MapShader, GetShaderLocation(MapShader, "SandTileNormalTexture"), &slot3, SHADER_UNIFORM_INT);
     int slot4 = 4; SetShaderValue(MapShader, GetShaderLocation(MapShader, "RockTileTexture"), &slot4, SHADER_UNIFORM_INT);
     int slot5 = 5; SetShaderValue(MapShader, GetShaderLocation(MapShader, "RockTileNormalTexture"), &slot5, SHADER_UNIFORM_INT);
+    int slot6 = 6; SetShaderValue(MapShader, GetShaderLocation(MapShader, "CliffTileTexture"), &slot6, SHADER_UNIFORM_INT);
+    int slot7 = 7; SetShaderValue(MapShader, GetShaderLocation(MapShader, "CliffTileNormalTexture"), &slot7, SHADER_UNIFORM_INT);
 
     DrawTexturePro(Tile::DummyTexture, GetMapBounds(), GetMapBounds(), Vector2(0, 0), 0.f, WHITE);
 

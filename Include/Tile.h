@@ -20,6 +20,8 @@ public:
     static Texture2D SandTileNormalTexture;
     static Texture2D RockTileTexture;
     static Texture2D RockTileNormalTexture;
+    static Texture2D CliffTileTexture;
+    static Texture2D CliffTileNormalTexture;
 
     Tile() {};
 

@@ -6,6 +6,8 @@ Texture2D Tile::SandTileTexture = {};
 Texture2D Tile::SandTileNormalTexture = {};
 Texture2D Tile::RockTileTexture = {};
 Texture2D Tile::RockTileNormalTexture = {};
+Texture2D Tile::CliffTileTexture = {};
+Texture2D Tile::CliffTileNormalTexture = {};
 
 void Tile::Initialize()
 {
@@ -25,4 +27,12 @@ void Tile::Initialize()
     RockTileNormalTexture = LoadTexture("Assets/Tiles/Tile_Rock_Normal.png");
     SetTextureWrap(RockTileNormalTexture, TEXTURE_WRAP_REPEAT);
     SetTextureFilter(RockTileNormalTexture, TEXTURE_FILTER_BILINEAR);
+
+    CliffTileTexture = LoadTexture("Assets/Tiles/Tile_Cliff_BaseColor.png");
+    SetTextureWrap(CliffTileTexture, TEXTURE_WRAP_REPEAT);
+    SetTextureFilter(CliffTileTexture, TEXTURE_FILTER_BILINEAR);
+
+    CliffTileNormalTexture = LoadTexture("Assets/Tiles/Tile_Cliff_Normal.png");
+    SetTextureWrap(CliffTileNormalTexture, TEXTURE_WRAP_REPEAT);
+    SetTextureFilter(CliffTileNormalTexture, TEXTURE_FILTER_BILINEAR);
 }
