@@ -1,38 +1,82 @@
 #include "Tile.h"
 #include <raymath.h>
 
-Texture2D Tile::DummyTexture = {};
-Texture2D Tile::SandTileTexture = {};
-Texture2D Tile::SandTileNormalTexture = {};
-Texture2D Tile::RockTileTexture = {};
-Texture2D Tile::RockTileNormalTexture = {};
-Texture2D Tile::CliffTileTexture = {};
-Texture2D Tile::CliffTileNormalTexture = {};
+Texture2D Tile::SandTile = {};
+Texture2D Tile::DuneTileSet = {};
+Texture2D Tile::RockTileSet = {};
+Texture2D Tile::CliffTileSet = {};
+
+std::unordered_map<std::string, Vector2> Tile::TileSetCoords
+{
+	{"NW",	{0.0f, 0.0f}},
+	{"N",	{1.0f, 0.0f}},
+	{"NE",	{2.0f, 0.0f}},
+	{"NEW",	{3.0f, 0.0f}},
+	{"W",	{0.0f, 1.0f}},
+	{"",	{1.0f, 1.0f}},
+	{"E",	{2.0f, 1.0f}},
+	{"EW",	{3.0f, 1.0f}},
+	{"SW",	{0.0f, 2.0f}},
+	{"S",	{1.0f, 2.0f}},
+	{"ES",	{2.0f, 2.0f}},
+	{"ESW",	{3.0f, 2.0f}},
+	{"NSW",	{0.0f, 3.0f}},
+	{"NS",	{1.0f, 3.0f}},
+	{"NES",	{2.0f, 3.0f}},
+	{"NESW",{3.0f, 3.0f}}
+};
 
 void Tile::Initialize()
 {
-    DummyTexture = LoadTextureFromImage(GenImageColor(TileSize, TileSize, WHITE));
+	SandTile = LoadTexture("Assets/Tiles/Tile_Sand.png");
+	DuneTileSet = LoadTexture("Assets/Tiles/Tiles_Dunes.png");
+	RockTileSet = LoadTexture("Assets/Tiles/Tiles_Rocks.png");
+	CliffTileSet = LoadTexture("Assets/Tiles/Tiles_Cliffs.png");
+}
 
-    SandTileTexture = LoadTexture("Assets/Tiles/Tile_Sand_BaseColor.png");
-    SetTextureFilter(SandTileTexture, TEXTURE_FILTER_POINT);
+void Tile::DrawTile() const
+{
+	Texture2D* Texture = nullptr;
+	std::string Pattern{};
 
-    SandTileNormalTexture = LoadTexture("Assets/Tiles/Tile_Sand_Normal.png");
-    SetTextureWrap(SandTileNormalTexture, TEXTURE_WRAP_REPEAT);
-    SetTextureFilter(SandTileNormalTexture, TEXTURE_FILTER_BILINEAR);
+	switch (TileType)
+	{
+		case TileType::Sand:
+			Texture = &SandTile;
+			Pattern = "NW";
+			break;
+		case TileType::Rock:
+			Texture = &RockTileSet;
+			Pattern = "";
+			break;
+		case TileType::Cliff:
+			Texture = &CliffTileSet;
+			Pattern = "";
+			break;
+		default:
+			Texture = &SandTile;
+			Pattern = "NW";
+			break;
+	}
 
-    RockTileTexture = LoadTexture("Assets/Tiles/Tile_Rock_BaseColor.png");
-    SetTextureWrap(RockTileTexture, TEXTURE_WRAP_REPEAT);
-    SetTextureFilter(RockTileTexture, TEXTURE_FILTER_BILINEAR);
+	Rectangle SourceRect = GetSourceDrawRectangleFromPattern(Pattern);
+	DrawTexturePro(*Texture, SourceRect, TargetDrawRectangle, Vector2(0.f, 0.f), 0.f, WHITE);
 
-    RockTileNormalTexture = LoadTexture("Assets/Tiles/Tile_Rock_Normal.png");
-    SetTextureWrap(RockTileNormalTexture, TEXTURE_WRAP_REPEAT);
-    SetTextureFilter(RockTileNormalTexture, TEXTURE_FILTER_BILINEAR);
+}
 
-    CliffTileTexture = LoadTexture("Assets/Tiles/Tile_Cliff_BaseColor.png");
-    SetTextureWrap(CliffTileTexture, TEXTURE_WRAP_REPEAT);
-    SetTextureFilter(CliffTileTexture, TEXTURE_FILTER_BILINEAR);
+void Tile::SetPosition(const Vector2& InPosition)
+{
+	Position = InPosition;
+	TargetDrawRectangle = Rectangle(Position.x, Position.y, TileSize, TileSize);
+}
 
-    CliffTileNormalTexture = LoadTexture("Assets/Tiles/Tile_Cliff_Normal.png");
-    SetTextureWrap(CliffTileNormalTexture, TEXTURE_WRAP_REPEAT);
-    SetTextureFilter(CliffTileNormalTexture, TEXTURE_FILTER_BILINEAR);
+Rectangle Tile::GetSourceDrawRectangleFromPattern(const std::string& Pattern) const
+{
+	if (!TileSetCoords.contains(Pattern))
+	{
+		return Rectangle{};
+	}
+
+	const Vector2 Coords = TileSetCoords[Pattern] * TileTextureSize;
+	return Rectangle(Coords.x, Coords.y, TileTextureSize, TileTextureSize);
 }

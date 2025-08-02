@@ -6,27 +6,35 @@
 
 enum class TileType
 {
-    Sand,
-    Rock,
-    Cliff
+	Sand,
+	Rock,
+	Cliff
 };
 
 class Tile
 {
 public:
-    static constexpr int TileSize = 64;
-    static Texture2D DummyTexture;
-    static Texture2D SandTileTexture;
-    static Texture2D SandTileNormalTexture;
-    static Texture2D RockTileTexture;
-    static Texture2D RockTileNormalTexture;
-    static Texture2D CliffTileTexture;
-    static Texture2D CliffTileNormalTexture;
+	static constexpr int TileSize = 64;
+	static constexpr int TileTextureSize = 16;
+
+	TileType TileType = TileType::Sand;
+	int SpiceAmount;
 
     Tile() {};
 
-    static void Initialize();
+	static void Initialize();
 
-    TileType TileType = TileType::Sand;
-    int SpiceAmount;
+    void DrawTile() const;
+    void SetPosition(const Vector2& Position);
+    Rectangle GetSourceDrawRectangleFromPattern(const std::string& Pattern) const;
+
+private:
+	static Texture2D SandTile;
+	static Texture2D DuneTileSet;
+	static Texture2D RockTileSet;
+	static Texture2D CliffTileSet;
+	static std::unordered_map<std::string, Vector2> TileSetCoords;
+
+	Vector2 Position = { 0.0f, 0.0f };
+	Rectangle TargetDrawRectangle{};
 };

@@ -5,49 +5,49 @@
 
 void Viewport::Initialize()
 {
-    GameInstance = Game::GetInstance();
-    Camera.offset = GameInstance->ScreenSize.ToVector2() * 0.5;
-    Camera.target = Camera.offset;
-    Camera.rotation = 0.f;
-    Camera.zoom = 1.0f;
-    CameraMapBounds = CalculateCameraMapBounds(GameInstance->Map.GetMapBounds());
+	GameInstance = Game::GetInstance();
+	Camera.offset = GameInstance->ScreenSize.ToVector2() * 0.5;
+	Camera.target = Camera.offset;
+	Camera.rotation = 0.f;
+	Camera.zoom = 1.0f;
+	CameraMapBounds = CalculateCameraMapBounds(GameInstance->Map.GetMapBounds());
 }
 
 void Viewport::Update()
 {
-    PanCamera();
+	PanCamera();
 }
 
 void Viewport::StartCameraPan(Vector2 InInitalMousePos)
 {
-    InitialMousePos = InInitalMousePos;
-    IsPanning = true;
+	InitialMousePos = InInitalMousePos;
+	IsPanning = true;
 }
 
 void Viewport::EndCameraPan()
 {
-    IsPanning = false;
+	IsPanning = false;
 }
 
 void Viewport::PanCamera()
 {
-    if (!IsPanning) { return; }
+	if (!IsPanning) { return; }
 
-    Vector2 PanDirection = GetMousePosition() - InitialMousePos;
-    Vector2 DesiredCameraTarget = Camera.target + PanDirection * GetFrameTime() * 10.f;
-    Camera.target = GetMapConstrainedCameraTarget(DesiredCameraTarget);
+	Vector2 PanDirection = GetMousePosition() - InitialMousePos;
+	Vector2 DesiredCameraTarget = Camera.target + PanDirection * GetFrameTime() * 10.f;
+	Camera.target = GetMapConstrainedCameraTarget(DesiredCameraTarget);
 }
 
 Rectangle Viewport::CalculateCameraMapBounds(const Rectangle& MapBounds)
 {
-    Vector2 ScreenSize = GameInstance->ScreenSize.ToVector2();
-    return Rectangle(Camera.offset.x, Camera.offset.y, MapBounds.width - ScreenSize.x, MapBounds.height - ScreenSize.y);
+	Vector2 ScreenSize = GameInstance->ScreenSize.ToVector2();
+	return Rectangle(Camera.offset.x, Camera.offset.y, MapBounds.width - ScreenSize.x, MapBounds.height - ScreenSize.y);
 }
 
 Vector2 Viewport::GetMapConstrainedCameraTarget(Vector2 CameraTarget)
 {
-    Vector2 MinBounds = { CameraMapBounds.x, CameraMapBounds.y };
-    Vector2 MaxBounds = { CameraMapBounds.x + CameraMapBounds.width, CameraMapBounds.y + CameraMapBounds.height };
+	Vector2 MinBounds = { CameraMapBounds.x, CameraMapBounds.y };
+	Vector2 MaxBounds = { CameraMapBounds.x + CameraMapBounds.width, CameraMapBounds.y + CameraMapBounds.height };
 
-    return Vector2Clamp(CameraTarget, MinBounds, MaxBounds);
+	return Vector2Clamp(CameraTarget, MinBounds, MaxBounds);
 }

@@ -7,24 +7,22 @@
 class Map
 {
 public:
-    Map() {};
+	Map() {};
 
-    void Initialize();
-    void Render();
+	void Initialize();
+	void Render();
 
-    Rectangle GetMapBounds() const;
-    Vector2 GetMapSize() const
-    {
-        return Vector2
-        {
-            static_cast<float>(MapImage.width),
-            static_cast<float>(MapImage.height)
-        };
-    }
+	Rectangle GetMapBounds() const;
+	Vector2 GetMapSize() const
+	{
+		return Vector2
+		{
+			static_cast<float>(MapImage.width),
+			static_cast<float>(MapImage.height)
+		};
+	}
 private:
-    std::vector<std::vector<Tile>> Tiles;
-    Image MapImage;
-    Texture2D MapTexture;
-    Shader MapShader;
-    void GenerateMap();
+	std::vector<std::vector<Tile>> Tiles;
+	Image MapImage;
+	void GenerateMap();
 };
