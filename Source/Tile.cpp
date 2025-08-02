@@ -2,6 +2,8 @@
 #include <raymath.h>
 
 Texture2D Tile::SandTile = {};
+Texture2D Tile::SpiceLowTileSet = {};
+Texture2D Tile::SpiceHighTileSet = {};
 Texture2D Tile::DuneTileSet = {};
 Texture2D Tile::RockTileSet = {};
 Texture2D Tile::CliffTileSet = {};
@@ -31,19 +33,58 @@ std::unordered_map<std::string, Vector2> Tile::TileSetCoords
 void Tile::Initialize()
 {
 	SandTile = LoadTexture("Assets/Tiles/Tile_Sand.png");
+	SpiceLowTileSet = LoadTexture("Assets/Tiles/Tiles_SpiceLow.png");
+	SpiceHighTileSet = LoadTexture("Assets/Tiles/Tiles_SpiceHigh.png");
 	DuneTileSet = LoadTexture("Assets/Tiles/Tiles_Dunes.png");
 	RockTileSet = LoadTexture("Assets/Tiles/Tiles_Rocks.png");
 	CliffTileSet = LoadTexture("Assets/Tiles/Tiles_Cliffs.png");
+}
+
+std::unordered_set<TileType> Tile::GetCompatibleTileTypes(const TileType& Type)
+{
+	switch (Type)
+	{
+	case TileType::Sand:
+		return std::unordered_set<TileType>{TileType::Sand};
+		break;
+	case TileType::SpiceLow:
+		return std::unordered_set<TileType>{TileType::SpiceLow, TileType::SpiceHigh};
+		break;
+	case TileType::SpiceHigh:
+		return std::unordered_set<TileType>{TileType::SpiceHigh};
+		break;
+	case TileType::Dune:
+		return std::unordered_set<TileType>{TileType::Dune};
+		break;
+	case TileType::Rock:
+		return std::unordered_set<TileType>{TileType::Rock, TileType::Cliff};
+		break;
+	case TileType::Cliff:
+		return std::unordered_set<TileType>{TileType::Cliff};
+		break;
+	default:
+		return std::unordered_set<TileType>();
+		break;
+	}
 }
 
 void Tile::DrawTile() const
 {
 	Texture2D* Texture = nullptr;
 
-	switch (TileType)
+	switch (Type)
 	{
 		case TileType::Sand:
 			Texture = &SandTile;
+			break;
+		case TileType::SpiceLow:
+			Texture = &SpiceLowTileSet;
+			break;
+		case TileType::SpiceHigh:
+			Texture = &SpiceHighTileSet;
+			break;
+		case TileType::Dune:
+			Texture = &DuneTileSet;
 			break;
 		case TileType::Rock:
 			Texture = &RockTileSet;
@@ -69,7 +110,7 @@ void Tile::SetPosition(const Vector2& InPosition)
 
 Rectangle Tile::GetSourceDrawRectangleFromPattern() const
 {
-	if (!TileSetCoords.contains(TilePattern) || TileType == TileType::Sand)
+	if (!TileSetCoords.contains(TilePattern) || Type == TileType::Sand)
 	{
 		return Rectangle(0.f, 0.f, TileTextureSize, TileTextureSize);
 	}

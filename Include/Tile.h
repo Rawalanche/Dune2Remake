@@ -2,11 +2,15 @@
 #include "Types.h"
 #include <raylib.h>
 #include <unordered_map>
+#include <unordered_set>
 #include <string>
 
 enum class TileType
 {
 	Sand,
+	SpiceLow,
+	SpiceHigh,
+	Dune,
 	Rock,
 	Cliff
 };
@@ -18,7 +22,7 @@ public:
 	static constexpr int TileTextureSize = 16;
 	static const char Directions[];
 
-	TileType TileType = TileType::Sand;
+	TileType Type = TileType::Sand;
 	int SpiceAmount;
 
 	Tile() {};
@@ -29,6 +33,8 @@ public:
 		return { Coords(x, y - 1), Coords(x + 1, y), Coords(x, y + 1), Coords(x - 1, y) };
 	}
 
+	static std::unordered_set<TileType>GetCompatibleTileTypes(const TileType& Type);
+
 	void DrawTile() const;
 	void SetPosition(const Vector2& Position);
 	void SetTilePattern(const std::string& InPattern) { TilePattern = InPattern; }
@@ -36,6 +42,8 @@ public:
 
 private:
 	static Texture2D SandTile;
+	static Texture2D SpiceLowTileSet;
+	static Texture2D SpiceHighTileSet;
 	static Texture2D DuneTileSet;
 	static Texture2D RockTileSet;
 	static Texture2D CliffTileSet;

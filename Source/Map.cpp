@@ -24,13 +24,23 @@ void Map::GenerateMap()
 			const Vector2 Position = Vector2(x * Tile::TileSize, y * Tile::TileSize);
 
 			CurrentTile.SetPosition(Position);
-			if (TileColor.g > 0)
+			if (TileColor.r > 0)
 			{
-				CurrentTile.TileType = TileType::Rock;
+				// Red pixels are Rich spice if they are bright red and spice otherwise.
+				CurrentTile.Type = TileColor.r > 192 ? TileType::SpiceHigh : TileType::SpiceLow;
+			}
+			else if (TileColor.g > 0)
+			{
+				// Green pixels are cliffs if they are bright green and rock otherwise.
+				CurrentTile.Type = TileColor.g > 192 ? TileType::Cliff : TileType::Rock;
+			}
+			else if (TileColor.b > 0)
+			{
+				CurrentTile.Type = TileType::Dune;
 			}
 			else
 			{
-				CurrentTile.TileType = TileType::Sand;
+				CurrentTile.Type = TileType::Sand;
 			}
 		}
 	}
@@ -54,7 +64,7 @@ void Map::GenerateMap()
 
 				Tile& NeighborTile = Tiles[NeighborCoords.y][NeighborCoords.x];
 
-				if (CurrentTile.TileType != NeighborTile.TileType)
+				if (!Tile::GetCompatibleTileTypes(CurrentTile.Type).contains(NeighborTile.Type))
 				{
 					TilePattern.push_back(Tile::Directions[c]);
 				}
