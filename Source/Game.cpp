@@ -9,7 +9,7 @@ void Game::Initialize()
 {
 	Instance = this;
 
-	InitWindow(ScreenSize.Width, ScreenSize.Height, "Dune2 Remake");
+	InitWindow(ScreenSize.x, ScreenSize.y, "Dune2 Remake");
 	SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
 
 	Tile::Initialize();

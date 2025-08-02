@@ -6,6 +6,8 @@ Texture2D Tile::DuneTileSet = {};
 Texture2D Tile::RockTileSet = {};
 Texture2D Tile::CliffTileSet = {};
 
+const char Tile::Directions[] = "NESW";
+
 std::unordered_map<std::string, Vector2> Tile::TileSetCoords
 {
 	{"NW",	{0.0f, 0.0f}},
@@ -37,29 +39,24 @@ void Tile::Initialize()
 void Tile::DrawTile() const
 {
 	Texture2D* Texture = nullptr;
-	std::string Pattern{};
 
 	switch (TileType)
 	{
 		case TileType::Sand:
 			Texture = &SandTile;
-			Pattern = "NW";
 			break;
 		case TileType::Rock:
 			Texture = &RockTileSet;
-			Pattern = "";
 			break;
 		case TileType::Cliff:
 			Texture = &CliffTileSet;
-			Pattern = "";
 			break;
 		default:
 			Texture = &SandTile;
-			Pattern = "NW";
 			break;
 	}
 
-	Rectangle SourceRect = GetSourceDrawRectangleFromPattern(Pattern);
+	Rectangle SourceRect = GetSourceDrawRectangleFromPattern();
 	DrawTexturePro(*Texture, SourceRect, TargetDrawRectangle, Vector2(0.f, 0.f), 0.f, WHITE);
 
 }
@@ -70,13 +67,13 @@ void Tile::SetPosition(const Vector2& InPosition)
 	TargetDrawRectangle = Rectangle(Position.x, Position.y, TileSize, TileSize);
 }
 
-Rectangle Tile::GetSourceDrawRectangleFromPattern(const std::string& Pattern) const
+Rectangle Tile::GetSourceDrawRectangleFromPattern() const
 {
-	if (!TileSetCoords.contains(Pattern))
+	if (!TileSetCoords.contains(TilePattern) || TileType == TileType::Sand)
 	{
-		return Rectangle{};
+		return Rectangle(0.f, 0.f, TileTextureSize, TileTextureSize);
 	}
 
-	const Vector2 Coords = TileSetCoords[Pattern] * TileTextureSize;
+	const Vector2 Coords = TileSetCoords[TilePattern] * TileTextureSize;
 	return Rectangle(Coords.x, Coords.y, TileTextureSize, TileTextureSize);
 }

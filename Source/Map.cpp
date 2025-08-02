@@ -19,30 +19,57 @@ void Map::GenerateMap()
 	{
 		for (int x = 0; x < MapImage.width; ++x)
 		{
-			Tile& Tile = Tiles[y][x];
+			Tile& CurrentTile = Tiles[y][x];
 			const Color& TileColor = GetImageColor(MapImage, x, y);
 			const Vector2 Position = Vector2(x * Tile::TileSize, y * Tile::TileSize);
 
-            Tile.SetPosition(Position);
+			CurrentTile.SetPosition(Position);
 			if (TileColor.g > 0)
 			{
-				Tile.TileType = TileType::Rock;
+				CurrentTile.TileType = TileType::Rock;
 			}
 			else
 			{
-				Tile.TileType = TileType::Sand;
+				CurrentTile.TileType = TileType::Sand;
 			}
+		}
+	}
+
+	for (int y = 0; y < MapImage.height; ++y)
+	{
+		for (int x = 0; x < MapImage.width; ++x)
+		{
+			Tile& CurrentTile = Tiles[y][x];
+			std::vector<Coords> NeighborTileCoords = Tile::GetNeighborTileCoords(x, y);
+			std::string TilePattern{};
+
+			for (int c = 0; c < NeighborTileCoords.size(); ++c)
+			{
+				Coords& NeighborCoords = NeighborTileCoords[c];
+
+				if (!IsCoordinateInMapBounds(NeighborCoords.x, NeighborCoords.y))
+				{
+					continue; // Treat neighbor as the same tile (Don't append direction to Pattern)
+				}
+
+				Tile& NeighborTile = Tiles[NeighborCoords.y][NeighborCoords.x];
+
+				if (CurrentTile.TileType != NeighborTile.TileType)
+				{
+					TilePattern.push_back(Tile::Directions[c]);
+				}
+			}
+			CurrentTile.SetTilePattern(TilePattern);
 		}
 	}
 }
 
 void Map::Render()
 {
-	for (int y = 0; y < MapImage.height; ++y)
+	for (const auto& Row : Tiles)
 	{
-		for (int x = 0; x < MapImage.width; ++x)
+		for (const auto& Tile : Row)
 		{
-			const Tile& Tile = Tiles[y][x];
 			Tile.DrawTile();
 		}
 	}

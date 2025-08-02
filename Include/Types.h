@@ -1,12 +1,12 @@
 #pragma once
 #include <raylib.h>
 
-struct Size2D
+struct Coords
 {
-	int Width, Height;
+	int x, y;
 
-	Size2D() : Width(0), Height(0) {};
-	Size2D(int InWidth, int InHeight) : Width(InWidth), Height(InHeight) {}
+	Coords() : x(0), y(0) {};
+	Coords(int InWidth, int InHeight) : x(InWidth), y(InHeight) {}
 
-	Vector2 ToVector2() const { return { (float)Width, (float)Height }; }
+	Vector2 ToVector2() const { return { (float)x, (float)y }; }
 };

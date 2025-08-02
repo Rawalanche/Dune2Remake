@@ -12,7 +12,7 @@ class Game
 public:
 	static Game* GetInstance() { return Instance; }
 
-	const Size2D ScreenSize = Size2D(1920, 1080);
+	const Coords ScreenSize = Coords(1920, 1080);
 
 	Viewport Viewport;
 	Map Map;

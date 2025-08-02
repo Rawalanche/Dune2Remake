@@ -12,7 +12,13 @@ public:
 	void Initialize();
 	void Render();
 
+	bool IsCoordinateInMapBounds(int x, int y)
+	{
+		return x >= 0 && y >= 0 && x < MapImage.width && y < MapImage.height;
+	}
+
 	Rectangle GetMapBounds() const;
+
 	Vector2 GetMapSize() const
 	{
 		return Vector2
